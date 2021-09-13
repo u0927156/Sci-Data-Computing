@@ -1,0 +1,225 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage[section]{placeins}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+
+
+\renewcommand\thesubsection{\alph{subsection}.}
+\renewcommand\thesubsubsection{\roman{subsubsection}.}
+
+
+
+
+\title{HW1 \\
+	\large CS 6210}
+\date{9/14/2021}
+\author{Spencer Peterson}
+
+\pagestyle{fancy}
+\rhead{Spencer Peterson}
+
+\begin{document}
+\maketitle
+
+\section{Exponential}
+
+This is a small program. 
+\begin{verbatim}
+%% Problem 1
+clear; clc; close all
+x = linspace(0,2, 1001);
+y = exp(x);
+
+figure(101)
+plot(x,y)
+title('Simple Exponential Function')
+
+\end{verbatim}
+
+
+\section{Vandermonde}
+
+Vandermonde Even-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 1.29e+01 & 1.63e+03 &  6.87e+05 & 3.06e+11 &  1.55e+23 & 8.91e+46 &  6.35e+94 & 6.70e+190 \\ \hline 
+$\infty$ & 1.19e+00 & 1.67e+02 &  8.63e+04 & 4.46e+10 &  2.47e+22 & 1.51e+46 &  1.11e+94 & 1.18e+190 \\ \hline 
+\end{tabular}
+\end{center}
+
+Vandermonde Chebyshev-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 1.36e+01 & 1.73e+03 &  1.22e+06 & 1.59e+12 &  5.98e+24 & 1.73e+50 &  2.90e+101 & 1.63e+204 \\ \hline 
+$\infty$ & 6.37e-01 & 1.63e+02 &  1.27e+05 & 1.84e+11 &  8.88e+23 & 3.58e+49 &  8.42e+100 & 6.56e+203 \\ \hline 
+\end{tabular}
+\end{center}
+
+In both cases, the accuracy of the interpolated lines become much less accurate. In this case the evenly spaced points actually performed slightly better than the chebyshev points. 
+\section{Polyinterp and Barylag}
+
+The polyinterp method was provided by Dr. Martin Berzins and the Barylag method was written by Greg Von Winckel.\\
+
+Lagrange Even-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 3.96e-03 & 5.57e-09 &  1.76e-11 & 9.01e-06 &  2.90e+06 & 1.25e+30 &  1.70e+77 & 5.22e+172 \\ \hline 
+$\infty$ & 3.05e-04 & 6.39e-10 &  8.01e-12 & 3.28e-06 &  1.57e+06 & 8.63e+29 &  1.09e+77 & 5.08e+172 \\ \hline 
+\end{tabular}
+\end{center}
+
+Lagrange Chebyshev-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 4.47e-03 & 2.48e-09 &  4.73e-14 & 5.96e-14 &  1.01e-13 & 1.29e-13 &  2.48e-13 &  NaN \\ \hline 
+$\infty$ & 2.44e-04 & 1.36e-10 &  7.99e-15 & 1.07e-14 &  1.24e-14 & 1.95e-14 &  2.93e-14 &  NaN \\ \hline 
+\end{tabular}
+\end{center}
+
+Barylag Even-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 1.79e+03 & 1.79e+03 &  1.79e+03 & 1.79e+03 &  2.77e+03 & 2.07e+03 &  1.01e+04 & 1.85e+03 \\ \hline 
+$\infty$ & 4.20e+03 & 4.20e+03 &  4.20e+03 & 4.20e+03 &  6.15e+04 & 3.87e+04 &  2.69e+05 & 4.20e+03 \\ \hline 
+\end{tabular}
+\end{center}
+
+Barylag Chebyshev-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 1.79e+03 & 1.79e+03 &  1.79e+03 & 1.79e+03 &  1.79e+03 & 1.79e+03 &  1.79e+03 & 1.79e+03 \\ \hline 
+$\infty$ & 4.20e+03 & 4.20e+03 &  4.20e+03 & 4.20e+03 &  4.20e+03 & 4.20e+03 &  4.20e+03 & 4.20e+03 \\ \hline 
+\end{tabular}
+\end{center}
+
+The Lagrange method was much more accurate until there were more than forty points in the even spacing case but worked very well for all points with the chebyshev spacing. Both of these algorithms performed better than using the Vandermonde matrix.
+
+\section{PCHIP}
+
+
+Pchip Even-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 1.42e-01 & 1.47e-02 &  1.45e-03 & 1.45e-04 &  1.49e-05 & 1.61e-06 &  1.82e-07 & 2.06e-08 \\ \hline 
+$\infty$ & 1.54e-02 & 2.23e-03 &  3.00e-04 & 3.88e-05 &  4.93e-06 & 6.22e-07 &  7.81e-08 & 3.46e-09 \\ \hline 
+\end{tabular}
+\end{center}
+
+Pchip Chebyshev-Spacing Interpolation
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+\hline norm & 6 & 11 & 21 & 41 & 81 & 161 & 321 & 641 \\ \hline \hline 
+2 & 2.55e-01 & 2.67e-02 &  3.07e-03 & 3.75e-04 &  4.66e-05 & 5.82e-06 &  7.23e-07 & 9.01e-08 \\ \hline 
+$\infty$ & 2.09e-02 & 2.24e-03 &  2.61e-04 & 3.08e-05 &  3.72e-06 & 4.60e-07 &  5.70e-08 & 7.09e-09 \\ \hline 
+\end{tabular}
+\end{center}
+
+Both the even-spaced and chebyshev spaced points performed similarly. The results are similar to what the the Lagrange chebyshev spaced points managed but depended less on spacing. 
+
+
+\section{Timing and Error}
+
+
+\begin{figure}[h!]
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=\linewidth]{EvenTime}
+	\end{subfigure}
+	
+	
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=\linewidth]{ChebyTime}
+	\end{subfigure}
+	
+	
+	\caption{Timing Plots}
+	\label{fig:Time}
+\end{figure}
+
+The pchip is the faster algorithm in almost all cases except for when the Vandermonde matrix is relatively fall.
+
+\begin{figure}[h!]
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=\linewidth]{EvenError}
+	\end{subfigure}
+	
+	
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=\linewidth]{ChebyError}
+	\end{subfigure}
+	
+	
+	\caption{Error Plots}
+	\label{fig:Error}
+\end{figure}
+
+The error grows exponentially for the Vandermonde matrix solver in all cases. The Lagrange error also grows the same way for evenly spaced points, but is low in the Chebyshev spaced points until the error throws an error and is NaN. The Barylag and PCHIP errors shrink slightly with the more points given. 
+
+
+\section{Weather}
+
+
+
+\begin{figure}[h!]
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=\linewidth]{WeatherInterpolation}
+	\end{subfigure}
+	
+	
+	\begin{subfigure}{\textwidth}
+		  \centering
+		  \includegraphics[width=.8\linewidth]{WeatherTime}
+	\end{subfigure}
+	
+	
+	\caption{Error Plots}
+	\label{fig:Error}
+\end{figure}
+
+All of the interpolants were pretty inaccurate. Surprisingly, the Vandermonde method produced the most accurate results. This is because the Vandermonde matrix after two interpolations produced a straight line at 0 which was better than the completely incorrect results given by the other methods. The results are summarized in the table below.
+
+\begin{center}
+\begin{tabular}{| c | c | c | c | c |}
+\hline norm & Vandermonde & Lagrange & Barylag & pchip \\ \hline \hline 
+2 & 1.426e+02 & 2.368e+28 &  8.109e+14 & 6.825e+40 \\ \hline 
+$\infty$ & 2.667e+01 & 2.368e+28 &  7.451e+14 & 6.825e+40 \\ \hline 
+\end{tabular}
+\end{center}
+
+
+
+\section{Summary}
+
+For the exponential equation, the PCHIP algorithm is both the most accurate and the fastest. For the weather data, the Barylag method was the faststed but not greatly faster than the Vandermonde or PCHIP method. Overall, I would recommend using the PCHIP algorithm. 
+
+
+
+\end{document}
