@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage[section]{placeins}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\lhead{Page \thepage}
+
+\renewcommand\thesubsection{\alph{subsection}.}
+\renewcommand\thesubsubsection{\roman{subsubsection}.}
+
+
+
+
+\title{HW2 \\
+	\large CS 6210}
+\date{10/4/2021}
+\author{Spencer Peterson}
+
+\pagestyle{fancy}
+\rhead{Spencer Peterson}
+
+\begin{document}
+\maketitle
+
+ \section{Water Flow Matrix}
+ 
+ I implemented three different iterative techniques to find the solution to this matrix. The methods were Jacobi, Gauss-Seidel, and Successive Over Relaxation. The results for each value of $a$ are shown below. Generally the SOR method was the most accurate, but it's accuracy was highly dependent on the value of omega. For all of the plots below, the value of omega for SOR was $1.95$.
+ \includegraphics[width=1\linewidth]{101}
+ \includegraphics[width=1\linewidth]{102}
+ \includegraphics[width=1\linewidth]{103}
+ \includegraphics[width=1\linewidth]{104}
+
+The condition number of matrix increases as the value of a approaches zero. The results are shown in the plot below. 
+\includegraphics[width=1\linewidth]{105}
+
+ 
+ 
+ \section{Multigrid Problem}
+
+\subsection{Multigrid}
+
+The method failed on my computer when I attempted to do it when one side of the grid had $2^15=32768$ elements. 
+
+The results of the timing experiment are shown below. The x axis is the base 2 log of how many elements on one side of the square matrix were used. The results are linear, showing a doubling in time for each doubling of the amount of elements.
+ \includegraphics[width=1\linewidth]{201}
+
+ The error over the number of elements is shown in the plot below. The error incleases linearly with the size of matrix.
+  \includegraphics[width=1\linewidth]{202}
+
+
+\subsection{Modify Laplace 2D}
+
+I modified code provided by Martin Berzins to solve the same problem as the multigrid method did above. The Jacobi method was slower by a factor of approximately 1000. The performance time for the Red-Black Gauss-Seidel method was much faster and was in the same order of magnitude as the Multigrid method. However, the error for both of these methods was about an order of magnitude higher than the multigrid method. 
+
+
+
+ \includegraphics[width=1\linewidth]{211}
+ 
+  \includegraphics[width=1\linewidth]{212}
+\end{document}

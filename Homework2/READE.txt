@@ -1,0 +1,6 @@
+To run the code, open Assignment2_SciComp in MATLAB. The code is divided in cells, where each cell roughly corresponds to one problem. 
+V2d_driver and Lacplace2d_modified also contain the code needed to calculate the results for the mutltigrid problem.
+
+Three methods Jacobi_SP, Gauss_Seidel_SP, and SOR_SP are implemented to perform an iterative solve of a system of equations of the form Ax = b.
+Each method requires A and b and the number of iterations, and SOR_SP requires an omega value between 1 and 2 exclusive. 
+
