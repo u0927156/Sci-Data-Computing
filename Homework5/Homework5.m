@@ -1,0 +1,177 @@
+%% Problem 1, Simpson's rule, polynomials
+% Finds the area underneath the function x^p using Simpson's rule
+
+clear; clc
+
+
+ps = [2 3 4 5 6 8]; % The values of p
+Ns = [17 33 65 129 257 513]; % The number of intervals to calculate with
+
+a = 0; b = 1; % The range to calculate on
+
+% Store values for display later.
+computed_values = zeros(length(ps), length(Ns));
+
+
+for m = 1:length(ps)
+    p = ps(m); % Get current p
+    F = @(x) (x.^p); % Make the function
+    for n = 1:length(Ns)
+        N = Ns(n); % Get current N
+
+        
+        width = (b-a)/N;
+
+        points = width/2:width:(b-width);
+
+        Area = sum(F(points) .* width);
+        % Calculate area.
+        computed_values(m,n) = simpsons_rule(F, a, b, N);
+
+    end
+end
+
+computed_values
+
+%% Problem 1, Simpson's Rule, Sinusoidal Function
+clc
+F = @(x) (1 + sin(x) .* cos(2.*x./3) .* sin(4.*x));
+a = 0; b = 2*pi;
+
+Ns = [ 17 33 65 129 257 513];
+
+sinusoidal_function_values = zeros(1, length(Ns));
+for m = 1:length(Ns)
+   N = Ns(m);
+   
+   sinusoidal_function_values(m) = simpsons_rule(F, a,b, N);
+    
+end
+sinusoidal_function_values
+%% Problem 2, QuadTX 
+clc; 
+
+F = @(x) (cos(x.^3).^200);
+a = 0; b = 3;
+
+tols = 10.^-(7:14);
+
+counts = zeros(1, length(tols));
+areas = zeros(1, length(tols));
+times = zeros(1, length(tols));
+
+for m = 1:length(tols)
+    tol = tols(m);
+    tic
+    [Q,fcount] = quadtx(F,a,b, tol);
+    times(m) = toc;
+    areas(m) = Q;
+    counts(m) = fcount;
+end
+
+areas
+counts
+times
+
+%% Problem 4, Cooling 
+clear; clc
+minutes = 5;
+total_time= minutes*60;
+t = 0:.01:(total_time);
+r = 0.025; % s^-1 
+Ts = 19; % Degrees Celcius
+
+T_analytical = 65.*exp(-r.*t) + Ts;
+
+
+figure(1)
+plot(t, T_analytical, '--')
+hold on;
+hs = [30 15 10 5 1 .5 .25];
+
+
+for h = hs
+    curr_t = 0;
+
+    dT = @(Tc) (-r .* (Tc - Ts));
+    T0 = 84;
+
+    curr_temp = T0;
+    temps = [curr_temp];
+    times = [curr_t];
+    while curr_t < total_time
+        slope = dT(curr_temp);
+
+        next_temp = curr_temp + h * slope;
+        next_t = curr_t + h;
+
+        times = [times curr_t];
+        temps = [temps curr_temp];
+
+        curr_t = next_t;
+        curr_temp = next_temp;
+
+    end
+
+    plot(times, temps, '-')
+end
+legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
+hold off
+title('Forward Euler Solution of Coffee Cup Problem')
+xlabel('Time (s)')
+ylabel('Temperature (C^\circ)')
+
+%% Problem 5-6, ODE23
+clc;
+f = @(t,y)(-r .* (y - Ts));
+
+
+curr_t = 0;
+
+y0 = 84;
+
+figure(2)
+plot(t, T_analytical, '--')
+hold on;
+hs = [30 15 10 5 1 .5 .25];
+
+for  h = hs
+    
+    [times, ys, errors] = MyODE23(f, 0, 300, y0, h);
+
+    plot(times, ys, '-.')
+end
+legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
+hold off
+title('ODE 23 Solution of Coffee Cup Problem')
+xlabel('Time (s)')
+ylabel('Temperature (C^\circ)')
+
+%% Problem 7, Bigger r
+
+r = 0.6;
+f = @(t,y)(-r .* (y - Ts));
+
+
+curr_t = 0;
+
+y0 = 84;
+
+figure(3)
+plot(t, T_analytical, '--')
+hold on;
+hs = [30 15 10 5 1 .5 .25];
+
+for  h = hs
+    
+    [times, ys, errors] = MyODE23(f, 0, 300, y0, h);
+
+    plot(times, ys, '-.')
+end
+legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
+hold off
+title('ODE 23 Solution of Coffee Cup Problem, Big r')
+xlabel('Time (s)')
+ylabel('Temperature (C^\circ)')
+
+
