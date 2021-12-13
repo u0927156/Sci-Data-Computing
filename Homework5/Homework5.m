@@ -85,7 +85,7 @@ fprintf('\n')
 
 %% Problem 3
 clc
-Ns = 2.^(11:17)+1;
+Ns = 2.^(11:24)+1;
 
 simpsons_tough = zeros(1, length(Ns));
 simpsons_times = zeros(1, length(Ns));
