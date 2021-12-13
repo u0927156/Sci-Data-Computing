@@ -19,12 +19,7 @@ for m = 1:length(ps)
     for n = 1:length(Ns)
         N = Ns(n); % Get current N
 
-        
-        width = (b-a)/N;
 
-        points = width/2:width:(b-width);
-
-        Area = sum(F(points) .* width);
         % Calculate area.
         computed_values(m,n) = simpsons_rule(F, a, b, N);
 
@@ -73,6 +68,40 @@ areas
 counts
 times
 
+temp = sprintf(' %.0s&', tols);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
+
+temp = sprintf(' %d&', counts);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
+
+temp = sprintf(' %.2f ms &', times.*1000);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
+
+%% Problem 3
+clc
+Ns = 2.^(11:17)+1;
+
+simpsons_tough = zeros(1, length(Ns));
+simpsons_times = zeros(1, length(Ns));
+for m = 1:length(Ns)
+    N = Ns(m);
+    tic
+    simpsons_tough(m) = simpsons_rule(F, a,b, N);
+    simpsons_times(m) = toc;
+end
+
+simpsons_tough
+
+tic
+[Q,fcount] = quadtx(F,a,b, tol);
+quadtx_time = toc;
+
 %% Problem 4, Cooling 
 clear; clc
 minutes = 5;
@@ -82,23 +111,26 @@ r = 0.025; % s^-1
 Ts = 19; % Degrees Celcius
 
 T_analytical = 65.*exp(-r.*t) + Ts;
-
+T = @(t) (65.*exp(-r.*t) + Ts);
 
 figure(1)
 plot(t, T_analytical, '--')
 hold on;
 hs = [30 15 10 5 1 .5 .25];
 
-
-for h = hs
+first_step_errors = ones(1, length(hs));
+for m = 1:length(hs)
+    
+    h = hs(m);
+    
     curr_t = 0;
 
     dT = @(Tc) (-r .* (Tc - Ts));
     T0 = 84;
 
     curr_temp = T0;
-    temps = [curr_temp];
-    times = [curr_t];
+    temps = [];
+    times = [];
     while curr_t < total_time
         slope = dT(curr_temp);
 
@@ -114,6 +146,13 @@ for h = hs
     end
 
     plot(times, temps, '-')
+    
+    after_first_step = times(2);
+    T_analytical_after_first_step = T(after_first_step);
+    T_estimated_after_first_step = temps(2);
+    
+    first_step_errors(m) = T_analytical_after_first_step - T_estimated_after_first_step;
+    
 end
 legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
 hold off
@@ -121,6 +160,18 @@ title('Forward Euler Solution of Coffee Cup Problem')
 xlabel('Time (s)')
 ylabel('Temperature (C^\circ)')
 
+
+
+
+temp = sprintf(' %.1d&', hs);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
+
+temp = sprintf(' %.3d&', first_step_errors);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
 %% Problem 5-6, ODE23
 clc;
 f = @(t,y)(-r .* (y - Ts));
@@ -135,11 +186,18 @@ plot(t, T_analytical, '--')
 hold on;
 hs = [30 15 10 5 1 .5 .25];
 
-for  h = hs
-    
+predicted_errors_ode23 = zeros(1, length(hs));
+actual_errors_ode23 = zeros(1, length(hs));
+
+
+for  m = 1:length(hs)
+    h = hs(m);
     [times, ys, errors] = MyODE23(f, 0, 300, y0, h);
 
     plot(times, ys, '-.')
+    
+    predicted_errors_ode23(m) = errors(2);
+    actual_errors_ode23(m) = T(times(2)) - ys(2) ;
 end
 legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
 hold off
@@ -147,6 +205,15 @@ title('ODE 23 Solution of Coffee Cup Problem')
 xlabel('Time (s)')
 ylabel('Temperature (C^\circ)')
 
+temp = sprintf(' %.3d&', predicted_errors_ode23);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
+
+temp = sprintf(' %.3d&', actual_errors_ode23);
+temp(end) = [];             %get rid of trailing comma
+fprintf(temp)
+fprintf('\n')
 %% Problem 7, Bigger r
 
 r = 0.6;
@@ -158,20 +225,33 @@ curr_t = 0;
 y0 = 84;
 
 figure(3)
+subplot(2,1,1)
 plot(t, T_analytical, '--')
 hold on;
 hs = [30 15 10 5 1 .5 .25];
 
+subplot(2,1,2)
+hold on;
 for  h = hs
     
     [times, ys, errors] = MyODE23(f, 0, 300, y0, h);
-
+    subplot(2,1,1)
     plot(times, ys, '-.')
+    
+    subplot(2,1,2)
+    plot(times, errors, '-.')
 end
-legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25')
+subplot(2,1,1)
+legend('Analytical', '30', '15', '10', '5', '1', '0.5', '0.25', 'location', 'Northwest')
 hold off
 title('ODE 23 Solution of Coffee Cup Problem, Big r')
 xlabel('Time (s)')
 ylabel('Temperature (C^\circ)')
 
+subplot(2,1,2)
+legend('30', '15', '10', '5', '1', '0.5', '0.25', 'location', 'Northwest')
+title('ODE 23 Error of Coffee Cup Problem, Big r')
+xlabel('Time (s)')
+ylabel('Error')
 
+hold off

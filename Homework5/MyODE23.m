@@ -5,7 +5,7 @@ function [t, y, error] = MyODE23(f, t0, tEnd, y0, h)
     curr_t = t0;
     ys = [curr_y];
     times = [curr_t];
-    errors = [];
+    errors = [0];
     
     while curr_t < tEnd
         S1 = f(curr_t, curr_y);
